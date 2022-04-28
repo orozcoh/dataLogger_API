@@ -37,8 +37,13 @@ class DataService {
   async getData() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-          resolve(this.data.splice(this.data.length-this.nDataGet, this.data.length));
-      }, 100);
+          if (this.data.length >= this.nDataGet){
+            resolve(this.data.splice(this.data.length-this.nDataGet, this.data.length));
+          }
+          else {
+            resolve(this.data.splice(0, this.data.length));
+          }
+      }, 50);
     });
     //return this.urls;
   }
@@ -47,7 +52,7 @@ class DataService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
           resolve(this.data);
-      }, 100);
+      }, 50);
     });
     //return this.urls;
   }
@@ -57,6 +62,7 @@ class DataService {
     const index = this.data.findIndex(item => item.id === id);
     //const a = this.funcionQueRompe();
     const prod = this.data.find(item => item.id === id);
+    console.log(prod)
     if (index === -1){
       return -1;
     }
