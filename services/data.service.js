@@ -5,7 +5,7 @@ class DataService {
     this.nDataGet = 60;
     this.last_id = -1;
     this.data = [];
-    this.create_1st_block();
+    //this.create_1st_block();
   }
 
   create_1st_block() {
