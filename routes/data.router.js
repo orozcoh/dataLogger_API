@@ -26,7 +26,7 @@ router.get('/:id', async (req,res, next) => {
     console.log(id);
     const data = await data_service.getOneData(parseInt(id));  //parseInt(id)
     if (data === -1){
-    res.status(404).json({message: "URL not found", id: id});
+    res.status(404).json({message: "ID not found", id: id});
     }
     else{
     res.status(200).json(data);
@@ -54,12 +54,12 @@ router.delete('/:id', async (req,res) => {
 
   if (dataDel === -1){
     res.status(404).json({
-      message : "URL not found",
+      message : "ID not found",
       id: id
     });
   }else {
     res.json({
-      message : "URL deleted",
+      message : "Data deleted",
       id: prodDel
     });
   }
@@ -72,7 +72,7 @@ router.patch('/:id',async (req,res) => {
   const body = req.body;
   const data = await data_service.update(parseInt(id), body);
   if (data === -1){
-    res.status(404).json({message: "Product not found", id: id});
+    res.status(404).json({message: "ID not found", id: id});
   } else {
     res.json(data);
   }

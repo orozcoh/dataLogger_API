@@ -5,19 +5,22 @@ class DataService {
     this.nDataGet = 60;
     this.last_id = -1;
     this.data = [];
-    //this.create_1st_block();
+    this.create_1st_block();
   }
 
   create_1st_block() {
     const timestamp = Date.now();
-    this.data.push({
+    for (let i=0; i<100; i++){
+      this.data.push({
         id: this.last_id + 1, //faker.datatype.uuid(),
         timestamp: timestamp,
         "Temp (°C)": "20.40",
         "Humidity (%)": "84.00",
         "Light": "0"
-    });
-    this.last_id += 1;
+      });
+      this.last_id += 1;
+    }
+
   }
 
   async create(data) {
@@ -37,12 +40,7 @@ class DataService {
   async getData() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-          if (this.data.length >= this.nDataGet){
-            resolve(this.data.splice(this.data.length-this.nDataGet, this.data.length));
-          }
-          else {
-            resolve(this.data.splice(0, this.data.length));
-          }
+        resolve(this.data.slice(this.data.length - this.nDataGet, this.data.length));
       }, 50);
     });
     //return this.urls;
