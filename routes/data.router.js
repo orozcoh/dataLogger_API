@@ -16,7 +16,7 @@ router.get('/', async (req,res) => {
 });
 
 router.get('/get-all', async (req,res) => {
-  const data_list = await data_service.getAllUrls();
+  const data_list = await data_service.getAllData();
   res.json(data_list);
 });
 
