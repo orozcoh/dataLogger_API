@@ -18,7 +18,7 @@ app.get('/', (req,res) => {
         //console.log(tree_data.toString());  
         res.send(tree_data);  
     } catch(e) {
-        console.log('Error:', e.stack);
+        //console.log('Error:', e.stack);
     }
 });
 

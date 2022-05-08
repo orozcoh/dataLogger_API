@@ -20,10 +20,35 @@ router.get('/get-all', async (req,res) => {
   res.json(data_list);
 });
 
+router.get('/getLast', async(req, res, next) => {
+  try{
+    const last = await data_service.getLast();
+    if (last === -1){
+      res.status(404).json({message: "Error retrieving last data"});
+    }
+    else{
+      res.status(200).json(last);
+    }
+  }
+  catch(error) {
+    next(error);
+  }
+});
+
+router.get('/lastUpdated', async(req, res, next) => {
+  try{
+    const lastUpdate = await data_service.lastUpdated();
+    res.status(200).json(lastUpdate);
+  }
+  catch(error) {
+    next(error);
+  }
+});
+
 router.get('/:id', async (req,res, next) => {
   try {
     const { id } = req.params;
-    console.log(id);
+    //console.log(id);
     const data = await data_service.getOneData(parseInt(id));  //parseInt(id)
     if (data === -1){
     res.status(404).json({message: "ID not found", id: id});
@@ -32,7 +57,7 @@ router.get('/:id', async (req,res, next) => {
     res.status(200).json(data);
     }
   } catch (error) {
-    console.log("error");
+    //console.log("error");
       next(error);
   }
 });

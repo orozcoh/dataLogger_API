@@ -5,7 +5,7 @@ class DataService {
     this.nDataGet = 60;
     this.last_id = -1;
     this.data = [];
-    //this.create_1st_block();
+    this.create_1st_block();
   }
 
   create_1st_block() {
@@ -20,7 +20,6 @@ class DataService {
       });
       this.last_id += 1;
     }
-
   }
 
   async create(data) {
@@ -56,17 +55,45 @@ class DataService {
   }
 
   async getOneData(id) {
-    console.log(id);
+    //console.log(id);
     const index = this.data.findIndex(item => item.id === id);
     //const a = this.funcionQueRompe();
     const prod = this.data.find(item => item.id === id);
-    console.log(prod)
+    //console.log(prod)
     if (index === -1){
       return -1;
     }
     else{
       return prod;
     }
+  }
+
+  async getLast(){
+    const lastData = this.data.slice(-1);
+    return lastData;
+  }
+
+  async lastUpdated() {
+    const DateNow = Date.now();
+    const _date = this.data.slice(-1);
+    const lastUpdate = _date[0]["timestamp"];
+    const difference = (DateNow - lastUpdate) / 1000;
+    
+    let output = ``;
+    if (difference < 60) {
+        // Less than a minute has passed:
+        output = `${difference} seconds ago`;
+    } else if (difference < 3600) {
+        // Less than an hour has passed:
+        output = `${Math.floor(difference / 60)} minutes ago`;
+    } else if (difference < 86400) {
+        // Less than a day has passed:
+        output = `${Math.floor(difference / 3600)} hours ago`;
+    } else {
+        // Less than a month has passed:
+        output = `${Math.floor(difference / 86400)} days ago`;
+    }
+    return output;
   }
 
   async delete(id) {
