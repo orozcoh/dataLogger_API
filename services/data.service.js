@@ -45,7 +45,7 @@ class DataService {
     //return this.urls;
   }
 
-  async getAllData() {
+  async getAll() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
           resolve(this.data);
@@ -54,7 +54,7 @@ class DataService {
     //return this.urls;
   }
 
-  async getOneData(id) {
+  async getOne(id) {
     //console.log(id);
     const index = this.data.findIndex(item => item.id === id);
     //const a = this.funcionQueRompe();

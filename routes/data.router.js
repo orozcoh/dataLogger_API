@@ -15,8 +15,8 @@ router.get('/', async (req,res) => {
   res.json(data);
 });
 
-router.get('/get-all', async (req,res) => {
-  const data_list = await data_service.getAllData();
+router.get('/getAll', async (req,res) => {
+  const data_list = await data_service.getAll();
   res.json(data_list);
 });
 
@@ -49,7 +49,7 @@ router.get('/:id', async (req,res, next) => {
   try {
     const { id } = req.params;
     //console.log(id);
-    const data = await data_service.getOneData(parseInt(id));  //parseInt(id)
+    const data = await data_service.getOne(parseInt(id));  //parseInt(id)
     if (data === -1){
     res.status(404).json({message: "ID not found", id: id});
     }
