@@ -85,7 +85,7 @@ router.delete('/:id', async (req,res) => {
   }else {
     res.json({
       message : "Data deleted",
-      id: prodDel
+      id: id
     });
   }
 });
