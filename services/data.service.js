@@ -108,13 +108,13 @@ class DataService {
 
   async update(id, changes) {
     const index = this.data.findIndex(item => item.id === id);
-    console.log(changes);
+    //console.log(changes);
      if (index === -1) {
          return -1;
      } else {
-      const url = this.data[index];
-      this.urls[index] = {
-          ...url,
+      const  prod = this.data[index];
+      this.data[index] = {
+          ...prod,
           ...changes
       };
       return this.data[index];
