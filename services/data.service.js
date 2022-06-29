@@ -1,3 +1,21 @@
+// -------------------------------- model ------------------------------------
+const mongoose = require('mongoose');
+	
+const Schema = mongoose.Schema;
+
+const mySchema = new Schema({
+  timestamp: Number,
+  device_ID: String,
+  temp: Number,
+  humidity: Number,
+  light: Number,
+  
+}, { collection: 'Invernadero' }, { versionKey: false });
+
+const Model = mongoose.model('invernadero', mySchema);
+
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 class DataService {
 
@@ -22,11 +40,35 @@ class DataService {
     }
   }
 
+  async postData2mongo(data){
+    const timestamp = Date.now();
+    const newDataLog = {
+        timestamp: timestamp,
+        ...data
+
+    }
+    this.last_id += 1;
+    const data2post = new Model(newDataLog);
+    try{
+      await data2post.save();                             // how to get status of connection to mongo before .save()
+      return newDataLog;
+    }
+    catch {
+      return "something went wrong with mongo";
+    }
+
+  }
+  
+  async getAllData(){
+      const data = await Model.find();
+      return data;
+  }
+
   async create(data) {
     const size = this.last_id + 1;
     const timestamp = Date.now();
     const newDataLog = {
-        id: size,
+        //id: size,
         timestamp: timestamp,
         ...data
 

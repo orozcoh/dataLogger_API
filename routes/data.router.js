@@ -7,6 +7,21 @@ const router = express.Router();
 router.use(express.json());
 const data_service = new DataService();
 
+const mongoose = require('mongoose');
+
+// -------------------------------- mongodb ------------------------------------
+
+const db_user = "User0"
+const db_pass = "UserPass"
+const db_port = "27017"
+const db_name = "DataLogger"
+
+const db_api2_path =  "mongodb://" + db_user + ":" + db_pass + "@localhost:" + db_port + "/" + db_name
+
+mongoose.Promise = global.Promise;
+
+mongoose.connect(db_api2_path).then(db => console.log("DB Connected to:", db.connection.host)).catch(err => console.error(err));
+
 // -------------------------------------------------------------------------------------
 // --------------------------------------- GET -----------------------------------------
 
@@ -24,7 +39,7 @@ router.get('/', async (req,res) => {
 
 router.get('/getAll', async (req,res) => {
   try{
-    const data_list = await data_service.getAll();
+    const data_list = await data_service.getAllData();  //const data_list = await data_service.getAll();
     res.json(data_list);
   } catch(error){
       res.status(404).json({
@@ -90,9 +105,12 @@ router.post('/', async (req, res, next) => {
   try{
     const body  = req.body;
     if (whiteList_ApiKeys.includes(body[0]["API_KEY"])){
-      console.log("POST from: " + body[1]["Device ID"]);          //<<<<<<<<<<<<<< LOG POST DEVICE_ID
-      const newData = await data_service.create(body[1]);
-      res.status(201).json(newData);
+      //console.log("POST from: " + body[1]["Device ID"]);          //<<<<<<<<<<<<<< LOG POST DEVICE_ID
+      // verify validity of data arriving
+      const newData = await data_service.postData2mongo(body[1]);
+      //console.log("done");
+      //const newData = await data_service.create(body[1]);
+      res.status(201).json([{"New Data (POST)": newData}]);
     }
     else{
       res.status(404).json({
