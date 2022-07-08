@@ -41,7 +41,7 @@ class DataService {
   }
 
   async postData2mongo(data){
-    const timestamp = Date.now();
+    const timestamp = Math.floor(Date.now()/1000);
     const newDataLog = {
         timestamp: timestamp,
         ...data
@@ -58,68 +58,56 @@ class DataService {
     }
 
   }
-  
-  async getAllData(){
-      const data = await Model.find();
-      return data;
-  }
 
-  async create(data) {
-    const size = this.last_id + 1;
-    const timestamp = Date.now();
-    const newDataLog = {
-        //id: size,
-        timestamp: timestamp,
-        ...data
+  // async create(data) {
+  //   const size = this.last_id + 1;
+  //   const timestamp = Date.now();
+  //   const newDataLog = {
+  //       //id: size,
+  //       timestamp: timestamp,
+  //       ...data
 
-    }
-    this.data.push(newDataLog);
-    this.last_id += 1;
-    return newDataLog;
-  }
+  //   }
+  //   this.data.push(newDataLog);
+  //   this.last_id += 1;
+  //   return newDataLog;
+  // }
 
   async getData() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(this.data.slice(this.data.length - this.nDataGet, this.data.length));
-      }, 50);
-    });
-    //return this.urls;
+      const data = await Model.find().sort({ _id: -1 }).limit(60)
+      return data;    // this.data.slice(this.data.length - this.nDataGet, this.data.length)
   }
 
-  async getAll() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-          resolve(this.data);
-      }, 50);
-    });
-    //return this.urls;
+  async getAllData(){
+    const data = await Model.find();
+    return data;
   }
 
-  async getOne(id) {
+  // async getAll() {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //         resolve(this.data);
+  //     }, 50);
+  //   });
+  //   //return this.urls;
+  // }
+
+  async getOne(ts) {
     //console.log(id);
-    const index = this.data.findIndex(item => item.id === id);
-    //const a = this.funcionQueRompe();
-    const prod = this.data.find(item => item.id === id);
-    //console.log(prod)
-    if (index === -1){
-      return -1;
-    }
-    else{
-      return prod;
-    }
+    const oneData = Model.where('timestamp').gte(ts-250).lte(ts+250);
+    return oneData;
   }
 
   async getLast(){
-    const lastData = this.data.slice(-1);
+    const lastData = await Model.find().sort({ _id: -1 }).limit(1);
     return lastData;
   }
 
   async lastUpdated() {
-    const DateNow = Date.now();
-    const _date = this.data.slice(-1);
+    const DateNow = Math.floor(Date.now()/1000);
+    const _date = await this.getLast()
     const lastUpdate = _date[0]["timestamp"];
-    const difference = (DateNow - lastUpdate) / 1000;
+    const difference = (DateNow - lastUpdate);
     
     let output = ``;
     if (difference < 60) {
