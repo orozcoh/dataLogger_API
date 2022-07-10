@@ -94,7 +94,7 @@ class DataService {
 
   async getOne(ts) {
     //console.log(id);
-    const oneData = Model.where('timestamp').gte(ts-250).lte(ts+250);
+    const oneData = Model.where('timestamp').gte(ts-150).lte(ts+150);
     return oneData;
   }
 
@@ -126,28 +126,21 @@ class DataService {
     return output;
   }
 
-  async delete(id) {
-    const index = this.data.findIndex(item => item.id === id);
-    if (index === -1) {
-        return -1;
-    }
-    const prod = this.data[index];
-    this.data.splice(index, 1);
+  async delete(ts) {
+    const prod = await Model.findOneAndDelete({timestamp: ts});
     return prod;
   }
 
-  async update(id, changes) {
-    const index = this.data.findIndex(item => item.id === id);
-    //console.log(changes);
-     if (index === -1) {
-         return -1;
+  async update(ts, changes) {
+    const filter = { timestamp: ts };
+    const doc = await Model.findOneAndUpdate(filter, changes, {new: true});
+
+     if (doc === null) {
+        //console.log("error updating");
+        return -1;
      } else {
-      const  prod = this.data[index];
-      this.data[index] = {
-          ...prod,
-          ...changes
-      };
-      return this.data[index];
+        //console.log("All good");
+        return doc;
      }
  }
 }

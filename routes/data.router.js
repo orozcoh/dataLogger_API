@@ -127,24 +127,28 @@ router.post('/', async (req, res, next) => {
 // -------------------------------------------------------------------------------------
 // ------------------------------------- DELETE ----------------------------------------
 
-router.delete('/:id', async (req,res) => {
+router.delete('/:ts', async (req,res) => {
 
   try{
-    const { id } = req.params;
+    const { ts } = req.params;
     const body  = req.body;
+    //console.log("ts: ", ts);
+    //console.log("data:", body);
 
     if (whiteList_Users.includes(body["API_KEY"])){
-      console.log("DELETE from: " + body["API_KEY"]);          //<<<<<<<<<<<<<< LOG POST DEVICE_ID
-      const dataDel = await data_service.delete(parseInt(id));
-      if (dataDel === -1){
+      //console.log("DELETE from: " + body["API_KEY"]);          //<<<<<<<<<<<<<< LOG POST DEVICE_ID
+      const dataDel = await data_service.delete(ts);
+      //console.log("res:", dataDel);
+      if (dataDel === null){
         res.status(404).json({
-          message : "ID not found",
-          id: id
+          message : "TimeStamp not found",
+          timestamp: ts
         });
       }else {
         res.json({
           message : "Data deleted",
-          id: id
+          timestamp: ts,
+          data: dataDel
         });
       }
     }
@@ -163,15 +167,16 @@ router.delete('/:id', async (req,res) => {
 // -------------------------------------------------------------------------------------
 // -------------------------------------- PATCH ----------------------------------------
 
-router.patch('/:id',async (req,res) => {
+router.patch('/:ts',async (req,res) => {
   try {
-    const { id } = req.params;
+    const { ts } = req.params;
     const body = req.body;
+    //console.log("body:", body[1])
     if (whiteList_Users.includes(body[0]["API_KEY"])){
-      console.log("PATCH from: " + body[0]["API_KEY"]);               //<<<<<<<<<<<<<< LOG POST DEVICE_ID
-      const data = await data_service.update(parseInt(id), body[1]);
+      //console.log("PATCH from: " + body[0]["API_KEY"]);               //<<<<<<<<<<<<<< LOG POST DEVICE_ID
+      const data = await data_service.update(ts, body[1]);
       if (data === -1){
-        res.status(404).json({message: "ID not found", id: id});
+        res.status(404).json({message: "timeStamp not found", timestamp: ts});
       } else {
         res.json(data);
       }
