@@ -10,7 +10,7 @@ const mySchema = new Schema({
   humidity: Number,
   light: Number,
   
-}, { collection: 'Invernadero' }, { versionKey: false });
+}, { collection: 'invernadero' }, { versionKey: false });
 
 const Model = mongoose.model('invernadero', mySchema);
 
