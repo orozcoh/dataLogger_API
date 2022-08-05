@@ -2,6 +2,8 @@
 const express = require('express');
 const routerApi_v1 = require('./routes');
 const app = express();
+// Enables CORS
+const cors = require('cors');
 
 const port = 4000;
 
@@ -12,6 +14,8 @@ app.use(express.json());
 whiteList_ApiKeys = ["test1",];
 
 whiteList_Users = ["admin"];
+
+app.use(cors({ origin: true }));
 
 routerApi_v1(app);
 
